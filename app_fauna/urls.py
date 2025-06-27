@@ -31,6 +31,8 @@ urlpatterns = [
 
     path('login/', LoginView.as_view(template_name='usuarios/login.html'), name='login'),
 path('perfil/eliminar/', PerfilDeleteView.as_view(), name='perfil_eliminar'),
+path('comentario/<int:pk>/editar/', ComentarioUpdateView.as_view(), name='comentario_update'),
+path('comentario/<int:pk>/eliminar/', ComentarioDeleteView.as_view(), name='comentario_delete'),
 
     path('logout/', LogoutView.as_view(next_page='login'), name='logout'),
     path('registro/', RegistroView.as_view(), name='registro'),

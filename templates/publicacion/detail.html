@@ -38,17 +38,27 @@
   </button>
 </form>
 
-<p>Likes: {{ publicacion.like_set.count }}</p>
+<p>Likes: {{ publicacion.likes.count }}</p>
 
 <!-- Comentarios -->
 <h3>Comentarios</h3>
 <ul>
   {% for comentario in publicacion.comentarios.all %}
-    <li><strong>{{ comentario.autor.username }}:</strong> {{ comentario.contenido }}</li>
+    <li>
+      <strong>{{ comentario.autor.username }}:</strong> {{ comentario.contenido }}
+    <br>
+      <small>Publicado el {{ comentario.fecha|date:"d/m/Y H:i" }}</small>
+
+      {% if comentario.autor == user %}
+        | <a href="{% url 'comentario_update' comentario.pk %}">Editar</a>
+        | <a href="{% url 'comentario_delete' comentario.pk %}">Eliminar</a>
+      {% endif %}
+    </li>
   {% empty %}
     <li>No hay comentarios aún.</li>
   {% endfor %}
 </ul>
+
 
 {% if user.is_authenticated %}
   <a href="{% url 'comentario_create' publicacion.pk %}">Agregar comentario</a>

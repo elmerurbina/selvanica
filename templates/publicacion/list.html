@@ -31,6 +31,9 @@
       {% endif %}
 
       <p>Publicado por: {{ publicacion.autor.username }}</p>
+    <p>Likes: {{ publicacion.likes.count }}</p>
+    <p><strong>Publicado el:</strong> {{ publicacion.fecha_publicacion|date:"d/m/Y H:i" }}</p>
+
     </li>
   {% empty %}
     <li>No hay publicaciones todavía.</li>

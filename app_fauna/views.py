@@ -154,6 +154,34 @@ class ComentarioCreateView(LoginRequiredMixin, CreateView):
         context['publicacion'] = self.publicacion  # 👈 Pasamos el objeto al template
         return context
 
+class ComentarioUpdateView(LoginRequiredMixin, UpdateView):
+    model = Comentario
+    fields = ['contenido']
+    template_name = 'comentario/form.html'
+
+    def get_queryset(self):
+        return Comentario.objects.filter(autor=self.request.user)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # Agrega la publicación asociada al comentario al contexto
+        context['publicacion'] = self.object.publicacion
+        return context
+
+    def get_success_url(self):
+        return reverse_lazy('publicacion_detail', kwargs={'pk': self.object.publicacion.pk})
+
+
+
+class ComentarioDeleteView(LoginRequiredMixin, DeleteView):
+    model = Comentario
+    template_name = 'comentario/confirm_delete.html'
+
+    def get_queryset(self):
+        return Comentario.objects.filter(autor=self.request.user)
+
+    def get_success_url(self):
+        return reverse_lazy('publicacion_detail', kwargs={'pk': self.object.publicacion.pk})
 
 
 # --- LIKE (solo crear y eliminar automáticamente) ---
