@@ -29,9 +29,24 @@
 
 <form method="post" enctype="multipart/form-data">
   {% csrf_token %}
-  {{ form.as_p }}
+  
+  {{ form.titulo.label_tag }}<br>
+  {{ form.titulo }}
+
+  {{ form.descripcion.label_tag }}<br>
+  {{ form.descripcion }}
+
+  {{ form.imagen_principal.label_tag }}<br>
+  {{ form.imagen_principal }}
+
+  {{ form.especie_nombre.label_tag }}<br>
+  {{ form.especie_nombre }}
+
+  {{ form.lugar_nombre.label_tag }}<br>
+  {{ form.lugar_nombre }}
 
   <button type="submit">Guardar</button>
   <a href="{% url 'publicacion_list' %}">Cancelar</a>
 </form>
+
 {% endblock %}

@@ -12,13 +12,16 @@
     {% endfor %}
   </ul>
 {% endif %}
+   
 
 <h2>{{ publicacion.titulo }}</h2>
 
 <img src="{{ publicacion.imagen_principal.url }}" alt="{{ publicacion.titulo }}" style="max-width: 300px;">
 
 <p><strong>Especie:</strong> {{ publicacion.especie.nombre_comun }}</p>
+     
 <p><strong>Lugar:</strong> {{ publicacion.lugar.nombre }}</p>
+    
 <p>{{ publicacion.descripcion }}</p>
 
 <p>Publicado por: {{ publicacion.autor.get_full_name|default:publicacion.autor.username }}</p>
@@ -27,7 +30,7 @@
 <form action="{% url 'like_toggle' publicacion.pk %}" method="post">
   {% csrf_token %}
   <button type="submit">
-    {% if user.is_authenticated and publicacion.like_set.filter(usuario=user).exists %}
+    {% if usuario_ya_dio_like %}
       ❤️ Quitar Like
     {% else %}
       🤍 Dar Like

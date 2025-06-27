@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib.auth.models import User
-from .models import PerfilUsuario
+from .models import PerfilUsuario, Publicacion
+
 
 class RegistroForm(forms.ModelForm):
     password = forms.CharField(widget=forms.PasswordInput)
@@ -49,3 +50,32 @@ class PerfilUsuarioForm(forms.ModelForm):
             user.save()
             perfil.save()
         return perfil
+
+class PublicacionForm(forms.ModelForm):
+    especie_nombre = forms.CharField(label='Especie', max_length=255)
+    lugar_nombre = forms.CharField(label='Lugar', max_length=255)
+
+    class Meta:
+        model = Publicacion
+        fields = ['titulo', 'descripcion', 'imagen_principal']  # quitar FK
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Si instancia con objeto, inicializa con los nombres FK actuales
+        if self.instance and self.instance.pk:
+            if self.instance.especie:
+                self.fields['especie_nombre'].initial = self.instance.especie.nombre_comun
+            if self.instance.lugar:
+                self.fields['lugar_nombre'].initial = self.instance.lugar.nombre
+
+    def clean_especie_nombre(self):
+        nombre = self.cleaned_data['especie_nombre'].strip()
+        if not nombre:
+            raise forms.ValidationError("Debe ingresar un nombre para la especie.")
+        return nombre
+
+    def clean_lugar_nombre(self):
+        nombre = self.cleaned_data['lugar_nombre'].strip()
+        if not nombre:
+            raise forms.ValidationError("Debe ingresar un nombre para el lugar.")
+        return nombre

@@ -5,7 +5,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 from django.shortcuts import redirect, get_object_or_404
 
-from .forms import RegistroForm, PerfilUsuarioForm
+from .forms import RegistroForm, PerfilUsuarioForm, PublicacionForm
 from .models import Publicacion, Especie, Lugar, Comentario, Like, PerfilUsuario
 from django.contrib.auth.models import User
 
@@ -24,19 +24,59 @@ class PublicacionDetailView(DetailView):
     template_name = 'publicacion/detail.html'
     context_object_name = 'publicacion'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        publicacion = self.get_object()
+        user = self.request.user
+        context['usuario_ya_dio_like'] = False
+        if user.is_authenticated:
+            context['usuario_ya_dio_like'] = publicacion.likes.filter(usuario=self.request.user).exists()
+        return context
+
+
 class PublicacionCreateView(LoginRequiredMixin, CreateView):
     model = Publicacion
+    form_class = PublicacionForm
     template_name = 'publicacion/form.html'
-    fields = ['titulo', 'descripcion', 'imagen_principal', 'especie', 'lugar']
 
     def form_valid(self, form):
+        # Crear o recuperar Especie
+        especie_nombre = form.cleaned_data['especie_nombre']
+        especie, created = Especie.objects.get_or_create(nombre_comun=especie_nombre)
+
+        # Crear o recuperar Lugar
+        lugar_nombre = form.cleaned_data['lugar_nombre']
+        lugar, created = Lugar.objects.get_or_create(nombre=lugar_nombre)
+
+        form.instance.especie = especie
+        form.instance.lugar = lugar
         form.instance.autor = self.request.user
         return super().form_valid(form)
 
+    def get_success_url(self):
+        # redirige a detalle de la publicación creada
+        return reverse_lazy('publicacion_detail', kwargs={'pk': self.object.pk})
+
+
 class PublicacionUpdateView(LoginRequiredMixin, UpdateView):
     model = Publicacion
+    form_class = PublicacionForm
     template_name = 'publicacion/form.html'
-    fields = ['titulo', 'descripcion', 'imagen_principal', 'especie', 'lugar']
+
+    def form_valid(self, form):
+        especie_nombre = form.cleaned_data['especie_nombre']
+        especie, created = Especie.objects.get_or_create(nombre_comun=especie_nombre)
+
+        lugar_nombre = form.cleaned_data['lugar_nombre']
+        lugar, created = Lugar.objects.get_or_create(nombre=lugar_nombre)
+
+        form.instance.especie = especie
+        form.instance.lugar = lugar
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        # redirige a detalle de la publicación creada
+        return reverse_lazy('publicacion_detail', kwargs={'pk': self.object.pk})
 
 class PublicacionDeleteView(LoginRequiredMixin, DeleteView):
     model = Publicacion
