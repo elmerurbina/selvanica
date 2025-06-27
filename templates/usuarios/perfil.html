@@ -31,8 +31,8 @@
     <ul>
       {% for publicacion in publicaciones_usuario %}
         <li>
-          <a href="{% url 'publicacion_detail' publicacion.pk %}">{{ publicacion.titulo }}</a>
-          <!-- Opcional: botón para eliminar publicación -->
+          <a href="{% url 'publicacion_detail' publicacion.pk %}">{{ publicacion.titulo }}</a> |
+          <a href="{% url 'publicacion_update' publicacion.pk %}">Editar</a> |
           <a href="{% url 'publicacion_delete' publicacion.pk %}" onclick="return confirm('¿Seguro que quieres eliminar esta publicación?');">Eliminar</a>
         </li>
       {% endfor %}
@@ -46,5 +46,4 @@
     {% csrf_token %}
     <button type="submit" class="boton-principal" style="background-color: #d32f2f;">Eliminar mi perfil</button>
   </form>
-
 {% endblock %}

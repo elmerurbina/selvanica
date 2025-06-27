@@ -137,13 +137,23 @@ class ComentarioCreateView(LoginRequiredMixin, CreateView):
     template_name = 'comentario/form.html'
     fields = ['contenido']
 
+    def dispatch(self, request, *args, **kwargs):
+        self.publicacion = get_object_or_404(Publicacion, pk=self.kwargs['pk'])
+        return super().dispatch(request, *args, **kwargs)
+
     def form_valid(self, form):
         form.instance.autor = self.request.user
-        form.instance.publicacion_id = self.kwargs['pk']
+        form.instance.publicacion = self.publicacion
         return super().form_valid(form)
 
     def get_success_url(self):
-        return reverse_lazy('publicacion_detail', kwargs={'pk': self.kwargs['pk']})
+        return reverse_lazy('publicacion_detail', kwargs={'pk': self.publicacion.pk})
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['publicacion'] = self.publicacion  # 👈 Pasamos el objeto al template
+        return context
+
 
 
 # --- LIKE (solo crear y eliminar automáticamente) ---

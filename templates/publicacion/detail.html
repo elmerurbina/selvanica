@@ -43,7 +43,7 @@
 <!-- Comentarios -->
 <h3>Comentarios</h3>
 <ul>
-  {% for comentario in publicacion.comentario_set.all %}
+  {% for comentario in publicacion.comentarios.all %}
     <li><strong>{{ comentario.autor.username }}:</strong> {{ comentario.contenido }}</li>
   {% empty %}
     <li>No hay comentarios aún.</li>
