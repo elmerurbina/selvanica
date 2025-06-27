@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block title %}Mi perfil - SelvaNica{% endblock %}
+
+{% block content %}
+    {% if messages %}
+  <ul class="messages">
+    {% for message in messages %}
+      <li class="{{ message.tags }}">{{ message }}</li>
+    {% endfor %}
+  </ul>
+{% endif %}
+
+<h2>Mi perfil</h2>
+
+<p><strong>Nombre:</strong> {{ request.user.first_name }} {{ request.user.last_name }}</p>
+<p><strong>Usuario:</strong> {{ request.user.username }}</p>
+<p><strong>Ubicación:</strong> {{ request.user.perfilusuario.ubicacion }}</p>
+
+{% if request.user.perfilusuario.foto_perfil %}
+  <img src="{{ request.user.perfilusuario.foto_perfil.url }}" alt="Foto de perfil" width="150">
+{% else %}
+  <p>No has subido foto de perfil.</p>
+{% endif %}
+
+<a href="{% url 'perfil_editar' %}">Editar perfil</a>
+{% endblock %}

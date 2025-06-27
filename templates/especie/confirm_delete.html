@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block title %}Eliminar especie - SelvaNica{% endblock %}
+
+{% block content %}
+<h2>¿Eliminar especie?</h2>
+<p>¿Seguro que quieres eliminar "{{ object.nombre_comun }}"?</p>
+
+<form method="post">
+  {% csrf_token %}
+  <button type="submit">Sí, eliminar</button>
+  <a href="{% url 'especie_list' %}">Cancelar</a>
+</form>
+{% endblock %}

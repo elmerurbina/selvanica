@@ -1,0 +1,212 @@
+/* ====== Paleta de Colores ====== */
+:root {
+  --color-blanco: #ffffff;
+  --color-verde: #2e7d32;
+  --color-verde-claro: #66bb6a;
+  --color-gris: #eeeeee;
+  --color-negro: #212121;
+
+  --color-primario: var(--color-verde);
+  --color-secundario: var(--color-verde-claro);
+  --color-fondo: var(--color-gris);
+  --color-texto: var(--color-negro);
+}
+
+/* ====== Base ====== */
+body {
+  background-color: var(--color-fondo);
+  color: var(--color-texto);
+  font-family: 'Segoe UI', sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+/* ====== Header y Footer ====== */
+header {
+  background-color: var(--color-primario);
+  padding: 0.2rem;
+  color: var(--color-blanco);
+}
+
+header nav {
+  display: flex;
+  justify-content: space-between;
+
+}
+
+header nav a {
+  color: var(--color-blanco);
+  text-decoration: none;
+  margin: 0 0.5rem;
+  font-weight: bold;
+}
+
+.nav-menu {
+  list-style: none;            /* Quita los puntos */
+  display: flex;               /* Hace el <ul> horizontal */
+  gap: 1rem;                   /* Espacio entre <li> */
+  margin: 0;
+  padding: 0;
+}
+
+.nav-menu li {
+  display: flex;               /* Para que el contenido dentro (ej: form) pueda alinearse */
+  align-items: center;
+}
+
+.foto-perfil-header {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    object-fit: cover;
+    vertical-align: middle;
+}
+
+
+main {
+  padding: 2rem;
+}
+
+footer {
+  background-color: var(--color-primario);
+  color: var(--color-blanco);
+  text-align: center;
+  padding: 1rem;
+  position: fixed;
+  width: 100%;
+  bottom: 0;
+}
+
+/* ====== Formularios ====== */
+form {
+  margin-top: 2rem;
+  text-align: center;
+}
+
+form label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 0.3rem;
+  color: var(--color-primario);
+}
+
+form input[type="text"],
+form input[type="email"],
+form input[type="password"],
+form input[type="file"],
+form select,
+form textarea {
+  width: 50%;
+  max-width: 400px;
+  margin: 0 auto 1rem auto;
+  display: block;
+  padding: 0.5rem 0.75rem;
+  border: 1.5px solid #ccc;
+  border-radius: 4px;
+  font-size: 1rem;
+  transition: border-color 0.3s ease;
+}
+
+form input:focus,
+form select:focus,
+form textarea:focus {
+  border-color: var(--color-secundario);
+  outline: none;
+  box-shadow: 0 0 5px var(--color-secundario);
+}
+
+textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+
+/* ====== Botones ====== */
+button,
+.boton-principal {
+  background-color: var(--color-secundario);
+  color: var(--color-blanco);
+  padding: 0.8rem 1.2rem;
+  border: none;
+  border-radius: 5px;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
+
+  margin-bottom: 80px;
+  transition: background-color 0.3s ease;
+}
+
+button:hover,
+.boton-principal:hover {
+  background-color: var(--color-primario);
+}
+
+/* ====== Mensajes ====== */
+ul.messages {
+  list-style: none;
+  padding: 0;
+  margin: 2rem auto;
+  max-width: 600px;
+}
+
+ul.messages li {
+  padding: 1rem;
+  margin-bottom: 1rem;
+  border-radius: 5px;
+  font-weight: bold;
+  color: var(--color-blanco);
+}
+
+ul.messages li.success {
+  background-color: #2e7d32;
+}
+
+ul.messages li.error {
+  background-color: #d32f2f;
+}
+
+ul.messages li.warning {
+  background-color: #fbc02d;
+  color: var(--color-negro);
+}
+
+ul.messages li.info {
+  background-color: #1976d2;
+}
+
+/* ====== Listas ====== */
+ul {
+  padding-left: 1.2rem;
+  margin-bottom: 1rem;
+}
+
+li {
+  margin-bottom: 0.4rem;
+}
+
+/* ====== Títulos ====== */
+h1, h2, h3 {
+  text-align: center;
+  color: var(--color-primario);
+}
+
+/* ====== Otros ====== */
+.clearfix::after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+
+.error-message {
+  background-color: #ffcdd2; /* rojo claro */
+  color: #b71c1c;             /* rojo oscuro */
+  padding: 0.75rem;
+  border-radius: 5px;
+  text-align: center;
+  margin: 1rem auto;
+  max-width: 400px;
+  font-weight: bold;
+}

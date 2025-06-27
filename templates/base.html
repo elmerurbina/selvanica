@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+{% load static %}
+
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}SelvaNica{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+<link
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+  rel="stylesheet"
+/>
+
+</head>
+<body>
+ <header>
+  <nav>
+    <!-- Mensajes de notificación -->
+    {% if messages %}
+      <ul class="messages">
+        {% for message in messages %}
+          <li class="{{ message.tags }}">{{ message }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+
+    <!-- Logo / Título -->
+    <h1><a href="{% url 'publicacion_list' %}">🌿 SelvaNica</a></h1>
+
+    <!-- Menú de navegación -->
+    <ul class="nav-menu">
+      <li><a href="{% url 'index' %}">Inicio</a></li>
+
+      {% if user.is_authenticated %}
+    <li>
+      <a href="{% url 'perfil' %}">
+        {% if perfil_usuario and perfil_usuario.foto_perfil %}
+          <img src="{{ perfil_usuario.foto_perfil.url }}" alt="Foto de perfil" class="foto-perfil-header" style="width:32px; height:32px; border-radius:50%; vertical-align: middle;">
+        {% else %}
+          {{ user.username }}
+        {% endif %}
+      </a>
+    </li>
+    <li>
+      <form id="logout-form" action="{% url 'logout' %}" method="post" style="display:inline;">
+  {% csrf_token %}
+  <button type="submit" class="logout-button" title="Cerrar sesión" style="background:none; border:none; cursor:pointer; color: inherit;">
+    <i class="fas fa-sign-out-alt"></i>
+  </button>
+</form>
+
+    </li>
+{% else %}
+    <li><a href="{% url 'login' %}">Iniciar sesión</a></li>
+    <li><a href="{% url 'registro' %}">Registrarse</a></li>
+{% endif %}
+
+    </ul>
+  </nav>
+</header>
+
+
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <footer>
+        <p>© {{ now|date:"Y" }} SelvaNica - Proyecto de Curso Base de Datos II</p>
+    </footer>
+</body>
+</html>

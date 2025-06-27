@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block title %}Inicio - SelvaNica{% endblock %}
+
+{% block content %}
+<h2>Bienvenido a SelvaNica</h2>
+<p>Explora las especies y lugares exóticos de Nicaragua.</p>
+<a href="{% url 'publicacion_list' %}" class="boton-principal">Ver publicaciones</a>
+{% endblock %}

@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block title %}Lugares - SelvaNica{% endblock %}
+
+{% block content %}
+    {% if messages %}
+  <ul class="messages">
+    {% for message in messages %}
+      <li class="{{ message.tags }}">{{ message }}</li>
+    {% endfor %}
+  </ul>
+{% endif %}
+
+<h2>Lugares</h2>
+
+<a href="{% url 'lugar_create' %}" class="boton-principal">Nuevo lugar</a>
+
+<ul>
+  {% for lugar in lugares %}
+    <li>
+      <strong>{{ lugar.nombre }}</strong> - {{ lugar.ubicacion }}
+      <p>{{ lugar.descripcion }}</p>
+    </li>
+  {% empty %}
+    <li>No hay lugares registrados.</li>
+  {% endfor %}
+</ul>
+{% endblock %}

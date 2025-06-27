@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+
+{% block title %}Eliminar publicación - SelvaNica{% endblock %}
+
+{% block content %}
+    {% if messages %}
+  <ul class="messages">
+    {% for message in messages %}
+      <li class="{{ message.tags }}">{{ message }}</li>
+    {% endfor %}
+  </ul>
+{% endif %}
+
+<h2>¿Eliminar publicación?</h2>
+<p>¿Seguro que quieres eliminar "{{ object.titulo }}"?</p>
+
+<form method="post">
+  {% csrf_token %}
+  <button type="submit">Sí, eliminar</button>
+  <a href="{% url 'publicacion_detail' object.pk %}">Cancelar</a>
+</form>
+{% endblock %}

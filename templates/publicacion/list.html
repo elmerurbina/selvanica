@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block title %}Publicaciones - SelvaNica{% endblock %}
+
+{% block content %}
+    {% if messages %}
+  <ul class="messages">
+    {% for message in messages %}
+      <li class="{{ message.tags }}">{{ message }}</li>
+    {% endfor %}
+  </ul>
+{% endif %}
+
+<h2>Publicaciones</h2>
+
+<a href="{% url 'publicacion_create' %}" class="boton-principal">Nueva publicación</a>
+
+<ul>
+  {% for publicacion in publicaciones %}
+    <li>
+      <a href="{% url 'publicacion_detail' publicacion.pk %}">
+        {{ publicacion.titulo }} - {{ publicacion.especie.nombre_comun }}
+      </a>
+      <p>Publicado por: {{ publicacion.autor.username }}</p>
+    </li>
+  {% empty %}
+    <li>No hay publicaciones todavía.</li>
+  {% endfor %}
+</ul>
+{% endblock %}

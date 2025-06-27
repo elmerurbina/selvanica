@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block title %}
+  {% if form.instance.pk %}
+      {% if messages %}
+  <ul class="messages">
+    {% for message in messages %}
+      <li class="{{ message.tags }}">{{ message }}</li>
+    {% endfor %}
+  </ul>
+{% endif %}
+
+    Editar publicación - SelvaNica
+  {% else %}
+    Nueva publicación - SelvaNica
+  {% endif %}
+{% endblock %}
+
+{% block content %}
+<h2>
+  {% if form.instance.pk %}
+    Editar publicación
+  {% else %}
+    Nueva publicación
+  {% endif %}
+</h2>
+
+<form method="post" enctype="multipart/form-data">
+  {% csrf_token %}
+  {{ form.as_p }}
+
+  <button type="submit">Guardar</button>
+  <a href="{% url 'publicacion_list' %}">Cancelar</a>
+</form>
+{% endblock %}

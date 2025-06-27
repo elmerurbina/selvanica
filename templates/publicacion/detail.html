@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block title %}{{ publicacion.titulo }} - SelvaNica{% endblock %}
+
+{% block content %}
+    {% if messages %}
+  <ul class="messages">
+    {% for message in messages %}
+      <li class="{{ message.tags }}">{{ message }}</li>
+    {% endfor %}
+  </ul>
+{% endif %}
+
+<h2>{{ publicacion.titulo }}</h2>
+
+<img src="{{ publicacion.imagen_principal.url }}" alt="{{ publicacion.titulo }}" style="max-width: 300px;">
+
+<p><strong>Especie:</strong> {{ publicacion.especie.nombre_comun }}</p>
+<p><strong>Lugar:</strong> {{ publicacion.lugar.nombre }}</p>
+<p>{{ publicacion.descripcion }}</p>
+
+<p>Publicado por: {{ publicacion.autor.get_full_name|default:publicacion.autor.username }}</p>
+
+<!-- Likes -->
+<form action="{% url 'like_toggle' publicacion.pk %}" method="post">
+  {% csrf_token %}
+  <button type="submit">
+    {% if user.is_authenticated and publicacion.like_set.filter(usuario=user).exists %}
+      ❤️ Quitar Like
+    {% else %}
+      🤍 Dar Like
+    {% endif %}
+  </button>
+</form>
+
+<p>Likes: {{ publicacion.like_set.count }}</p>
+
+<!-- Comentarios -->
+<h3>Comentarios</h3>
+<ul>
+  {% for comentario in publicacion.comentario_set.all %}
+    <li><strong>{{ comentario.autor.username }}:</strong> {{ comentario.contenido }}</li>
+  {% empty %}
+    <li>No hay comentarios aún.</li>
+  {% endfor %}
+</ul>
+
+{% if user.is_authenticated %}
+  <a href="{% url 'comentario_create' publicacion.pk %}">Agregar comentario</a>
+{% else %}
+  <p><a href="{% url 'login' %}">Inicia sesión</a> para comentar.</p>
+{% endif %}
+
+<!-- Editar / Eliminar -->
+{% if user == publicacion.autor %}
+  <p>
+    <a href="{% url 'publicacion_update' publicacion.pk %}">Editar</a> |
+    <a href="{% url 'publicacion_delete' publicacion.pk %}">Eliminar</a>
+  </p>
+{% endif %}
+
+<a href="{% url 'publicacion_list' %}">Volver a publicaciones</a>
+{% endblock %}

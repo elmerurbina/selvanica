@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Iniciar sesión - SelvaNica{% endblock %}
+
+{% block content %}
+<h2>Iniciar sesión</h2>
+
+<form method="post">
+  {% csrf_token %}
+
+  {{ form.non_field_errors }}
+
+  <div class="form-group">
+    <label for="{{ form.username.id_for_label }}">Usuario:</label>
+    {{ form.username }}
+  </div>
+
+  <div class="form-group">
+    <label for="{{ form.password.id_for_label }}">Contraseña:</label>
+    {{ form.password }}
+  </div>
+
+  <button type="submit">Entrar</button>
+</form>
+
+<p>¿No tienes cuenta? <a href="{% url 'registro' %}">Regístrate aquí</a></p>
+{% endblock %}

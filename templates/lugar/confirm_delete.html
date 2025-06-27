@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block title %}Eliminar lugar - SelvaNica{% endblock %}
+
+{% block content %}
+<h2>¿Eliminar lugar?</h2>
+<p>¿Seguro que quieres eliminar "{{ object.nombre }}"?</p>
+
+<form method="post">
+  {% csrf_token %}
+  <button type="submit">Sí, eliminar</button>
+  <a href="{% url 'lugar_list' %}">Cancelar</a>
+</form>
+{% endblock %}

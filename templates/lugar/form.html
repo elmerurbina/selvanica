@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block title %}
+  {% if form.instance.pk %}
+    Editar lugar - SelvaNica
+  {% else %}
+    Nuevo lugar - SelvaNica
+  {% endif %}
+{% endblock %}
+
+{% block content %}
+<h2>
+  {% if form.instance.pk %}
+    Editar lugar
+  {% else %}
+    Nuevo lugar
+  {% endif %}
+</h2>
+
+<form method="post" enctype="multipart/form-data">
+  {% csrf_token %}
+  {{ form.as_p }}
+
+  <button type="submit">Guardar</button>
+  <a href="{% url 'lugar_list' %}">Cancelar</a>
+</form>
+{% endblock %}

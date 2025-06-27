@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Editar perfil - SelvaNica{% endblock %}
+
+{% block content %}
+<h2>Editar perfil</h2>
+
+<form method="post" enctype="multipart/form-data">
+  {% csrf_token %}
+  {{ form.non_field_errors }}
+
+  <label for="{{ form.first_name.id_for_label }}">Nombre:</label>
+  {{ form.first_name }}
+
+  <label for="{{ form.last_name.id_for_label }}">Apellido:</label>
+  {{ form.last_name }}
+
+  <label for="{{ form.ubicacion.id_for_label }}">Ubicación:</label>
+  {{ form.ubicacion }}
+
+  <label for="{{ form.foto_perfil.id_for_label }}">Foto de perfil:</label>
+  {{ form.foto_perfil }}
+
+  <button type="submit">Guardar cambios</button>
+</form>
+
+{% endblock %}

@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block title %}
+  {% if form.instance.pk %}
+    Editar especie - SelvaNica
+  {% else %}
+    Nueva especie - SelvaNica
+  {% endif %}
+{% endblock %}
+
+{% block content %}
+<h2>
+  {% if form.instance.pk %}
+    Editar especie
+  {% else %}
+    Nueva especie
+  {% endif %}
+</h2>
+
+<form method="post" enctype="multipart/form-data">
+  {% csrf_token %}
+  {{ form.as_p }}
+
+  <button type="submit">Guardar</button>
+  <a href="{% url 'especie_list' %}">Cancelar</a>
+</form>
+{% endblock %}

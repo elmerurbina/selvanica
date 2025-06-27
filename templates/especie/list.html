@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}Especies - SelvaNica{% endblock %}
+
+{% block content %}
+    {% if messages %}
+  <ul class="messages">
+    {% for message in messages %}
+      <li class="{{ message.tags }}">{{ message }}</li>
+    {% endfor %}
+  </ul>
+{% endif %}
+
+<h2>Especies</h2>
+
+<a href="{% url 'especie_create' %}" class="boton-principal">Nueva especie</a>
+
+<ul>
+  {% for especie in especies %}
+    <li>
+      <a href="#">{{ especie.nombre_comun }}</a> <!-- Puedes hacer link a detalle si agregas esa vista -->
+      <p><em>{{ especie.nombre_cientifico }}</em></p>
+    </li>
+  {% empty %}
+    <li>No hay especies registradas.</li>
+  {% endfor %}
+</ul>
+{% endblock %}
