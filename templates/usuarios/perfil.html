@@ -1,29 +1,50 @@
 {% extends 'base.html' %}
 {% load static %}
 
-
 {% block title %}Mi perfil - SelvaNica{% endblock %}
 
 {% block content %}
-    {% if messages %}
-  <ul class="messages">
-    {% for message in messages %}
-      <li class="{{ message.tags }}">{{ message }}</li>
-    {% endfor %}
-  </ul>
-{% endif %}
+  {% if messages %}
+    <ul class="messages">
+      {% for message in messages %}
+        <li class="{{ message.tags }}">{{ message }}</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
 
-<h2>Mi perfil</h2>
+  <h2>Mi perfil</h2>
 
-<p><strong>Nombre:</strong> {{ request.user.first_name }} {{ request.user.last_name }}</p>
-<p><strong>Usuario:</strong> {{ request.user.username }}</p>
-<p><strong>Ubicación:</strong> {{ request.user.perfilusuario.ubicacion }}</p>
+  <p><strong>Nombre:</strong> {{ request.user.first_name }} {{ request.user.last_name }}</p>
+  <p><strong>Usuario:</strong> {{ request.user.username }}</p>
+  <p><strong>Ubicación:</strong> {{ request.user.perfilusuario.ubicacion }}</p>
 
-{% if request.user.perfilusuario.foto_perfil %}
-  <img src="{{ request.user.perfilusuario.foto_perfil.url }}" alt="Foto de perfil" width="150">
-{% else %}
-  <p>No has subido foto de perfil.</p>
-{% endif %}
+  {% if request.user.perfilusuario.foto_perfil %}
+    <img src="{{ request.user.perfilusuario.foto_perfil.url }}" alt="Foto de perfil" width="150">
+  {% else %}
+    <p>No has subido foto de perfil.</p>
+  {% endif %}
 
-<a href="{% url 'perfil_editar' %}">Editar perfil</a>
+  <a href="{% url 'perfil_editar' %}">Editar perfil</a>
+
+  <h3>Mis publicaciones</h3>
+  {% if publicaciones_usuario %}
+    <ul>
+      {% for publicacion in publicaciones_usuario %}
+        <li>
+          <a href="{% url 'publicacion_detail' publicacion.pk %}">{{ publicacion.titulo }}</a>
+          <!-- Opcional: botón para eliminar publicación -->
+          <a href="{% url 'publicacion_delete' publicacion.pk %}" onclick="return confirm('¿Seguro que quieres eliminar esta publicación?');">Eliminar</a>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>No tienes publicaciones.</p>
+  {% endif %}
+
+  <h3>Eliminar perfil</h3>
+  <form action="{% url 'perfil_eliminar' %}" method="post" onsubmit="return confirm('¿Seguro que quieres eliminar tu perfil? Esta acción no se puede deshacer.')">
+    {% csrf_token %}
+    <button type="submit" class="boton-principal" style="background-color: #d32f2f;">Eliminar mi perfil</button>
+  </form>
+
 {% endblock %}

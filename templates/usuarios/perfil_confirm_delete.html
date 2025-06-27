@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block title %}Confirmar eliminación de perfil{% endblock %}
+
+{% block content %}
+  <h2>Confirmar eliminación de perfil</h2>
+  <p>¿Estás seguro que quieres eliminar tu perfil? Esta acción no se puede deshacer.</p>
+
+  <form method="post">
+    {% csrf_token %}
+    <button type="submit" class="boton-principal" style="background-color: #d32f2f;">Eliminar</button>
+    <a href="{% url 'perfil' %}">Cancelar</a>
+  </form>
+{% endblock %}

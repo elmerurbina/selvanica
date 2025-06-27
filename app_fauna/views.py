@@ -131,7 +131,10 @@ class PerfilView(LoginRequiredMixin, TemplateView):
         context = super().get_context_data(**kwargs)
         perfil = PerfilUsuario.objects.filter(user=self.request.user).first()
         context['perfil'] = perfil
+        # Agregar publicaciones propias
+        context['publicaciones_usuario'] = Publicacion.objects.filter(autor=self.request.user)
         return context
+
 
 class PerfilEditView(LoginRequiredMixin, UpdateView):
     model = PerfilUsuario
@@ -148,3 +151,20 @@ class PerfilEditView(LoginRequiredMixin, UpdateView):
 
     def get_success_url(self):
         return reverse_lazy('perfil')
+
+
+class PerfilDeleteView(LoginRequiredMixin, DeleteView):
+    model = PerfilUsuario
+    template_name = 'usuarios/perfil_confirm_delete.html'
+    success_url = reverse_lazy('index')
+
+    def get_object(self, queryset=None):
+        return PerfilUsuario.objects.get(user=self.request.user)
+
+    def delete(self, request, *args, **kwargs):
+        # Opcional: borrar también el usuario auth para eliminar todo
+        user = request.user
+        self.object = self.get_object()
+        response = super().delete(request, *args, **kwargs)
+        user.delete()  # elimina el usuario auth
+        return response

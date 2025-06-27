@@ -30,6 +30,8 @@ urlpatterns = [
     path('', IndexView.as_view(), name='index'),
 
     path('login/', LoginView.as_view(template_name='usuarios/login.html'), name='login'),
+path('perfil/eliminar/', PerfilDeleteView.as_view(), name='perfil_eliminar'),
+
     path('logout/', LogoutView.as_view(next_page='login'), name='logout'),
     path('registro/', RegistroView.as_view(), name='registro'),
     path('perfil/', PerfilView.as_view(), name='perfil'),
