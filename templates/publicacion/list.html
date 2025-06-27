@@ -19,14 +19,22 @@
 
 <ul>
   {% for publicacion in publicaciones %}
-    <li>
+    <li style="margin-bottom: 20px;">
       <a href="{% url 'publicacion_detail' publicacion.pk %}">
-        {{ publicacion.titulo }} - {{ publicacion.especie.nombre_comun }}
-      </a>
+        <strong>{{ publicacion.titulo }}</strong> - {{ publicacion.especie.nombre_comun }}
+      </a><br>
+
+      {% if publicacion.imagen_principal %}
+        <img src="{{ publicacion.imagen_principal.url }}" alt="{{ publicacion.titulo }}" style="max-width: 200px;">
+      {% else %}
+        <p>Sin imagen</p>
+      {% endif %}
+
       <p>Publicado por: {{ publicacion.autor.username }}</p>
     </li>
   {% empty %}
     <li>No hay publicaciones todavía.</li>
   {% endfor %}
 </ul>
+
 {% endblock %}
