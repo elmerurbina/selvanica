@@ -21,6 +21,16 @@ body {
   padding: 0;
 }
 
+ .card {
+    background: #f1f8e9;
+    padding: 1rem;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    font-weight: bold;
+    text-align: center;
+    min-width: 150px;
+  }
+
 /* ====== Header y Footer ====== */
 header {
   background-color: var(--color-primario);

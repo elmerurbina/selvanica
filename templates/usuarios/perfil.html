@@ -40,6 +40,60 @@
   {% else %}
     <p>No tienes publicaciones.</p>
   {% endif %}
+    
+    <h3>Resumen de Actividad</h3>
+<div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+  <div class="card">📝 Publicaciones: {{ total_publicaciones }}</div>
+  <div class="card">❤️ Likes dados: {{ total_likes_dados }}</div>
+  <div class="card">📥 Likes recibidos: {{ total_likes_recibidos }}</div>
+  <div class="card">💬 Comentarios hechos: {{ total_comentarios_realizados }}</div>
+  <div class="card">📨 Comentarios recibidos: {{ total_comentarios_recibidos }}</div>
+</div>
+
+<h3>Actividad diaria (últimos 30 días)</h3>
+<canvas id="actividadChart" width="800" height="300"></canvas>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  const labels = {{ labels|safe }};
+  const publicaciones = {{ data_publicaciones|safe }};
+  const comentarios = {{ data_comentarios|safe }};
+  const likes = {{ data_likes|safe }};
+
+  new Chart(document.getElementById('actividadChart'), {
+    type: 'line',
+    data: {
+      labels: labels,
+      datasets: [
+        {
+          label: 'Publicaciones',
+          data: publicaciones,
+          borderColor: 'green',
+          fill: false
+        },
+        {
+          label: 'Comentarios',
+          data: comentarios,
+          borderColor: 'blue',
+          fill: false
+        },
+        {
+          label: 'Likes',
+          data: likes,
+          borderColor: 'red',
+          fill: false
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      scales: {
+        y: { beginAtZero: true }
+      }
+    }
+  });
+</script>
+
 
   <h3>Eliminar perfil</h3>
   <form action="{% url 'perfil_eliminar' %}" method="post" onsubmit="return confirm('¿Seguro que quieres eliminar tu perfil? Esta acción no se puede deshacer.')">

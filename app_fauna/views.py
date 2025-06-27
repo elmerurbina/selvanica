@@ -1,3 +1,8 @@
+from datetime import timedelta
+
+from django.db.models import Count
+from django.db.models.functions import TruncDate
+from django.utils.timezone import now
 from django.views.generic import (
     ListView, DetailView, CreateView, UpdateView, DeleteView, View, TemplateView
 )
@@ -207,12 +212,59 @@ class PerfilView(LoginRequiredMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        perfil = PerfilUsuario.objects.filter(user=self.request.user).first()
-        context['perfil'] = perfil
-        # Agregar publicaciones propias
-        context['publicaciones_usuario'] = Publicacion.objects.filter(autor=self.request.user)
-        return context
+        user = self.request.user
+        perfil = PerfilUsuario.objects.filter(user=user).first()
+        publicaciones = Publicacion.objects.filter(autor=user)
 
+        # Métricas básicas
+        total_publicaciones = publicaciones.count()
+        total_comentarios_realizados = Comentario.objects.filter(autor=user).count()
+        total_likes_dados = Like.objects.filter(usuario=user).count()
+        total_comentarios_recibidos = Comentario.objects.filter(publicacion__autor=user).count()
+        total_likes_recibidos = Like.objects.filter(publicacion__autor=user).count()
+
+        # Actividad diaria (últimos 30 días)
+        hoy = now().date()
+        dias = [hoy - timedelta(days=i) for i in range(29, -1, -1)]
+
+        actividad = {dia.strftime("%Y-%m-%d"): {'publicaciones': 0, 'comentarios': 0, 'likes': 0} for dia in dias}
+
+        # Contar publicaciones diarias
+        publicaciones_por_dia = publicaciones.annotate(dia=TruncDate('fecha_publicacion')).values('dia').annotate(total=Count('id'))
+        for pub in publicaciones_por_dia:
+            dia = pub['dia'].strftime("%Y-%m-%d")
+            if dia in actividad:
+                actividad[dia]['publicaciones'] = pub['total']
+
+        # Contar comentarios diarios
+        comentarios_por_dia = Comentario.objects.filter(autor=user).annotate(dia=TruncDate('fecha')).values('dia').annotate(total=Count('id'))
+        for com in comentarios_por_dia:
+            dia = com['dia'].strftime("%Y-%m-%d")
+            if dia in actividad:
+                actividad[dia]['comentarios'] = com['total']
+
+        # Contar likes diarios (cuando el usuario dio like)
+        likes_por_dia = Like.objects.filter(usuario=user, publicacion__fecha_publicacion__isnull=False).annotate(dia=TruncDate('publicacion__fecha_publicacion')).values('dia').annotate(total=Count('id'))
+        for lk in likes_por_dia:
+            dia = lk['dia'].strftime("%Y-%m-%d")
+            if dia in actividad:
+                actividad[dia]['likes'] = lk['total']
+
+        context.update({
+            'perfil': perfil,
+            'publicaciones_usuario': publicaciones,
+            'total_publicaciones': total_publicaciones,
+            'total_comentarios_realizados': total_comentarios_realizados,
+            'total_likes_dados': total_likes_dados,
+            'total_likes_recibidos': total_likes_recibidos,
+            'total_comentarios_recibidos': total_comentarios_recibidos,
+            'labels': [fecha for fecha, _ in actividad.items()],
+            'data_publicaciones': [datos['publicaciones'] for _, datos in actividad.items()],
+            'data_comentarios': [datos['comentarios'] for _, datos in actividad.items()],
+            'data_likes': [datos['likes'] for _, datos in actividad.items()],
+        })
+
+        return context
 
 class PerfilEditView(LoginRequiredMixin, UpdateView):
     model = PerfilUsuario
